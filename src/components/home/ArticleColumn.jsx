@@ -9,7 +9,7 @@ export default class ArticleColumn extends Component {
         <h3>{article.title}</h3>
         <p>{article.description}</p>
         <p>
-          <Button bsStyle="primary">Detail</Button>
+          <Button bsStyle="primary" href={article.url}>Detail</Button>
         </p>
       </Thumbnail>
     )

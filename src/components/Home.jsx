@@ -16,7 +16,7 @@ export default class Home extends Component {
   nextPage () {
     let prevPage = this.state.fiveTopArticles[0]
     let index = this.state.news.findIndex( article => article.url === prevPage.url) + 5
-    if(index > 19) {
+    if(index > this.state.news.length - 1) {
       index = 0
     }
     this.setState({

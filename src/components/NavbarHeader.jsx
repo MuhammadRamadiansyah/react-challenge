@@ -1,11 +1,12 @@
 import React from 'react'
 import { Nav, NavItem, Navbar } from 'react-bootstrap'
+// import { Link } from 'react-router-dom'
 
 const NavbarHeader = () => (
   <Navbar inverse collapseOnSelect>
     <Navbar.Header>
       <Navbar.Brand>
-        <a href="#brand">React-Bootstrap</a>
+        <a href="#brand">MyNews</a>
       </Navbar.Brand>
       <Navbar.Toggle />
     </Navbar.Header>
