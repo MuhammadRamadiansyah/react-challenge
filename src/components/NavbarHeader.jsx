@@ -20,10 +20,10 @@ const NavbarHeader = () => (
         </NavItem>
       </Nav>
       <Nav pullRight>
-        <NavItem eventKey={1} href="#">
+        <NavItem>
           Login
         </NavItem>
-        <NavItem eventKey={2} href="#">
+        <NavItem >
           Register
         </NavItem>
       </Nav>

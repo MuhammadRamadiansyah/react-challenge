@@ -1,0 +1,20 @@
+.navbarLink {
+  text-decoration: none;
+  color: darkslateblue;
+  display: inline-block;
+  margin: 0px 10px;
+  font-size: 20px;
+}
+
+.navbarLink:active {
+  text-decoration: none;
+}
+
+.navbarLink:link {
+  text-decoration: none;
+}
+
+.navbarLink:visited {
+  text-decoration: none;
+  background: mintcream;
+}
