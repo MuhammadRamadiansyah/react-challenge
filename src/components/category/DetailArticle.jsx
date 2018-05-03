@@ -1,18 +1,44 @@
 import React, { Component } from 'react'
-import { Thumbnail } from 'react-bootstrap'
+import store from '../../stores/index.js'
+import ArticleBox from '../general/ArticleBox'
 
 export default class DetailArticle extends Component {
+
+  constructor () {
+    super()
+    this.state = {
+      detailArticle: store.getState().article[0]
+    }
+  }
+
+  componentDidMount () {
+    store.subscribe( () => {
+      this.setState({
+        detailArticle: store.getState().article[0] 
+      })
+    })
+    if (!this.state.detailArticle) {
+      console.log(this.props.history.push('/'))
+    }
+  }
   render () {
+    var {
+      author,
+      title,
+      publishedAt,
+      description,
+      urlToImage
+    } = store.getState().article[0]
+
     return (
-      <Thumbnail>
-        <h3>{this.props.match.params.title}l</h3>
-        <small>Author : {`${this.props.match.params.author}`}</small>
-        <br />
-        <small>Source : {`${this.props.match.params.source}`}</small>
-        <br />
-        <p>{this.props.match.params.description}</p>
-        <small>Published at: {`${this.props.match.params.publisheddate.toLocaleString()}`}</small>
-      </Thumbnail>
+      <div>
+        <ArticleBox image= { urlToImage }
+                    title= { title } 
+                    description= { description } 
+                    publishedAt= { publishedAt } 
+                    source= { this.state.detailArticle.source.name} 
+                    author= { author }/>
+      </div>
     )
   }
 }

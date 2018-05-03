@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
-import { Button, Thumbnail } from 'react-bootstrap'
+import ArticleBox from '../general/ArticleBox'
 
 export default class ArticleColumn extends Component {
 
   render () {
     let getArticles = this.props.news.map( article => 
-      <Thumbnail  key={ 'articleDetail-' +article.url} src={article.urlToImage || 'http://www.tradefireworks.net/product_images/fan-slices_242_200_no-image.gif&zc=1'}  alt="242x200">
-        <h3>{article.title}</h3>
-        <p>{article.description}</p>
-        <p>
-          <Button bsStyle="primary" href={article.url}>Detail</Button>
-        </p>
-      </Thumbnail>
+      <ArticleBox image= { article.urlToImage }
+                  title= { article.title } 
+                  description= { article.description } 
+                  publishedAt= { article.publishedAt } 
+                  source= { article.source.name} 
+                  author= { article.author }
+                  key={ 'articleDetail-' +article.url}/>
     )
     return (
       <div>

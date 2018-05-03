@@ -5,9 +5,11 @@ import Home from './components/Home'
 import Category from './components/Category'
 import NotFound from './components/404'
 import Login from './components/Login'
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom'
+import DetailArticle from './components/category/DetailArticle'
+import { BrowserRouter as Router, Route, Switch, Link, Redirect } from 'react-router-dom'
 import NavbarHeader from './components/NavbarHeader'
 import './components/Navbar.css'
+import store from './stores/index'
 
 class App extends Component {
   render() {
@@ -25,6 +27,15 @@ class App extends Component {
             <Route exact path="/" component={Home}/>
             <Route path="/category" component={Category}/>
             <Route path="/login" component={Login} />
+            <Route path="/detail/:title" render= {
+             (props => {
+               if (store.getState().article) {
+                 return <DetailArticle />
+               } else {
+                 return <Redirect to="/" />
+               }
+             })
+           }/>
             <Route path="*" component={NotFound}/>
           </Switch>
         </div>

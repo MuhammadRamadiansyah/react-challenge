@@ -72,7 +72,7 @@ export default class Home extends Component {
 
   render () {
     let listArticles = this.state.news.map( article => 
-      <ListArticle article= { article } key= { 'article-' +article.url} />
+      <ListArticle article= { article } history= { this.props.history } key= { 'article-' +article.url} />
     )
     return (
       <Grid>

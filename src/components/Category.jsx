@@ -26,7 +26,7 @@ export default class Category extends Component {
             <h3> List Articles </h3>
             <Switch>
               <Route exact path={`${getUrl}/:category`} component={ListNewsByCategory}/>
-              <Route path={`${getUrl}/:category/:title/:description/:publisheddate/:author/:source`} component={DetailArticle}/>
+              <Route path={`${getUrl}/:category/:title`} component={DetailArticle}/>
             </Switch>
             </Col>
           </Row>

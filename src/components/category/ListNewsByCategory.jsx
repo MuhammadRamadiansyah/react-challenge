@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import { Panel, Button } from 'react-bootstrap'
 import axios from 'axios'
+import store from '../../stores/index.js'
 
 export default class ListNewsByCategory extends Component {
 
   constructor () {
     super()
     this.state = {
-      newsByCategory: []
+      newsByCategory: store.getState().article
     }
   }
   // static getDerivedStateFromProps(nextProps, prevState) {
@@ -17,9 +18,13 @@ export default class ListNewsByCategory extends Component {
   componentWillReceiveProps (nextProps, prevState) {
     axios.get(`https://newsapi.org/v2/top-headlines?country=id&category=${nextProps.match.params.category}&apiKey=be71eb3a224f436bad9338489412fedb`)
     .then((response) => {
-     this.setState({
-       newsByCategory: response.data.articles.slice(0, 5),
-     })
+      store.dispatch({
+        type: 'GET_ARTICLES_BY_CATEGORY',
+        payload: response.data.articles
+      })
+      this.setState({
+        newsByCategory: store.getState().article
+      })
     })
     .catch((err) => console.log(err))
   }
@@ -27,16 +32,27 @@ export default class ListNewsByCategory extends Component {
   componentDidMount () {
     axios.get(`https://newsapi.org/v2/top-headlines?country=id&category=${this.props.match.params.category}&apiKey=be71eb3a224f436bad9338489412fedb`)
     .then((response) => {
-     this.setState({
-       newsByCategory: response.data.articles.slice(0, 5),
-     })
+
+      store.dispatch({
+        type: 'GET_ARTICLES_BY_CATEGORY',
+        payload: response.data.articles
+      })
+      this.setState({
+        newsByCategory: store.getState().article
+      })
+      
     })
     .catch((err) => console.log(err))
   }
 
   getDetail (article) {
     let getUrl = this.props.match.url
-    this.props.history.push(`${getUrl}/${article.title}/${article.description}/${article.publishedAt}/${article.author}/${article.source.name}`)
+    store.dispatch({
+      type: 'GET_DETAIL_ARTICLE',
+      payload: [ article ]
+    })
+    
+    this.props.history.push(`${getUrl}/${article.title}`)
   }
 
   render () {
