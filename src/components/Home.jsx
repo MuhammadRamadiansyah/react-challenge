@@ -3,65 +3,42 @@ import axios from 'axios'
 import { Grid, Row, Col, Pager } from 'react-bootstrap';
 import ListArticle from './home/ListArticles'
 import ArticleColumn from "./home/ArticleColumn";
-import store from '../stores'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { getAllArticles, getDetailArticle, getArticlesByCategory } from '../stores/articles/actions'
+import { getTopArticles, nextArticles, prevArticles } from '../stores/top-articles/actions'
 
-export default class Home extends Component {
-  constructor () {
-    super()
-    this.state = {
-      news: store.getState().article,
-      fiveTopArticles: store.getState().topArticle
-    }
-    store.subscribe ( () => {
-      this.setState({
-        fiveTopArticles: store.getState().topArticle,
-        news: store.getState().article
-      })
-    })
-  }
+class Home extends Component {
 
   nextPage () {
-    let prevPage = store.getState().topArticle[0]
-    let index = store.getState().article.findIndex( article => article.url === prevPage.url) + 5
-    if(index > store.getState().article.length - 1) {
+    let prevPage = this.props.topArticles[0]
+    let index = this.props.articles.findIndex( article => article.url === prevPage.url) + 5
+    if(index > this.props.articles.length - 1) {
       index = 0
     }
-    store.dispatch({
-      type: 'NEXT_ARTICLES',
-      payload: store.getState().article.slice(index, index + 5)
-    }) 
+    this.props.nextArticles(this.props.articles.slice(index, index + 5))
   }
 
   prevPage () {
-    let prevPage = store.getState().topArticle[0]
-    let index = store.getState().article.findIndex( article => article.url === prevPage.url) - 5
+    let prevPage = this.props.topArticles[0]
+    let index = this.props.articles.findIndex( article => article.url === prevPage.url) - 5
     if(index < 0) {
-      index = store.getState().article.length - 5
+      index = this.props.articles.length - 5
     }
-
-    store.dispatch({
-      type: 'PREV_ARTICLES',
-      payload: store.getState().article.slice(index, index + 5)
-    })
+    this.props.prevArticles(this.props.articles.slice(index, index + 5))
   }
 
   componentDidMount () {
     axios.get('https://newsapi.org/v2/top-headlines?country=id&category=business&apiKey=be71eb3a224f436bad9338489412fedb')
          .then((response) => {  
-            store.dispatch({
-              type: 'GET_ALL_ARTICLES',
-              payload: response.data.articles
-            })
-            store.dispatch({
-              type: 'GET_TOP_ARTICLES',
-              payload: response.data.articles.slice(0,5)
-            })
+            this.props.getAllArticles(response.data.articles)
+            this.props.getTopArticles(response.data.articles.slice(0,5))
          })
          .catch((err) => console.log(err))
   }
 
   render () {
-    let listArticles = this.state.news.map( article => 
+    let listArticles = this.props.articles.map( article => 
       <ListArticle article= { article } history= { this.props.history } key= { 'article-' +article.url} />
     )
     return (
@@ -69,7 +46,7 @@ export default class Home extends Component {
         <Row className="show-grid">
           <Col xs={12} md={8}>
             <h3> Top 5 Articles</h3>
-            <ArticleColumn news={ this.state.fiveTopArticles } />
+            <ArticleColumn news={ this.props.topArticles } />
             <Pager>
               <Pager.Item onClick={this.prevPage.bind(this)}>Previous</Pager.Item>{' '}
               <Pager.Item onClick={this.nextPage.bind(this)}>Next</Pager.Item>
@@ -84,3 +61,24 @@ export default class Home extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => ({
+  articles: state.article,
+  topArticles: state.topArticle
+})
+
+const mapStateToDispatch = (dispatch) => bindActionCreators({
+  getAllArticles,
+  getArticlesByCategory,
+  getDetailArticle,
+  getTopArticles,
+  nextArticles,
+  prevArticles
+}, dispatch)
+
+const HomeLink = connect(
+  mapStateToProps,
+  mapStateToDispatch
+)(Home)
+
+export default HomeLink

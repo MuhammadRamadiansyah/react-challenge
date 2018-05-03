@@ -3,7 +3,7 @@ const reducers = (state=[], action) => {
     case 'GET_ALL_ARTICLES':
       return action.payload
     case 'GET_DETAIL_ARTICLE':
-      return action.payload  
+      return [action.payload]
     case 'GET_ARTICLES_BY_CATEGORY':
       return action.payload
     default:
