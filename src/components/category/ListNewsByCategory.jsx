@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Panel, Button } from 'react-bootstrap'
-import axios from 'axios'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { getArticlesByCategory } from '../../stores/articles/actions'
@@ -9,19 +8,11 @@ import { getDetailArticle } from '../../stores/detail-article/actions'
 class ListNewsByCategory extends Component {
 
   componentWillReceiveProps (nextProps, prevState) {
-    axios.get(`https://newsapi.org/v2/top-headlines?country=id&category=${nextProps.props.match.params.category}&apiKey=be71eb3a224f436bad9338489412fedb`)
-    .then((response) => {
-      this.props.getArticlesByCategory(response.data.articles)
-    })
-    .catch((err) => console.log(err))
+    this.props.getArticlesByCategory(nextProps.props.match.params.category)
   }
 
   componentDidMount () {
-    axios.get(`https://newsapi.org/v2/top-headlines?country=id&category=${this.props.props.match.params.category}&apiKey=be71eb3a224f436bad9338489412fedb`)
-    .then((response) => {
-      this.props.getArticlesByCategory(response.data.articles)      
-    })
-    .catch((err) => console.log(err))
+    this.props.getArticlesByCategory(this.props.props.match.params.category)
   }
 
   getDetail (article) {
@@ -56,7 +47,7 @@ class ListNewsByCategory extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  articles: state.article
+  articles: state.article.data
 })
 
 const mapStateToDispatch = (dispatch) => bindActionCreators({

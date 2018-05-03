@@ -1,11 +1,39 @@
-import { GET_ALL_ARTICLES, GET_ARTICLES_BY_CATEGORY } from '../actions.type'
+import { LOAD_ARTICLES_ERROR, LOAD_ARTICLES_LOADING, LOAD_ALL_ARTICLES_SUCCESS} from '../actions.type'
+import axios from 'axios'
 
-export const getAllArticles = (articles) => ({
-  type: GET_ALL_ARTICLES,
+export const getAllArticles = () => {
+  return dispatch => {
+    dispatch(loadArticlesLoading())
+    axios.get('https://newsapi.org/v2/top-headlines?country=id&category=business&apiKey=be71eb3a224f436bad9338489412fedb')
+         .then((response) => {
+           dispatch(loadAllArticlesSuccess(response.data.articles))
+         })
+         .catch((err) => dispatch(loadArticlesError()))
+  }
+}
+
+export const getArticlesByCategory = (category) => {
+  return dispatch => {
+    dispatch(loadArticlesLoading())
+    axios.get(`https://newsapi.org/v2/top-headlines?country=id&category=${category}&apiKey=be71eb3a224f436bad9338489412fedb`)
+    .then((response) => {
+      dispatch(loadAllArticlesSuccess(response.data.articles))    
+    })
+    .catch((err) => dispatch(loadArticlesError()))
+  }
+}
+
+const loadAllArticlesSuccess = (articles) => ({
+  type: LOAD_ALL_ARTICLES_SUCCESS,
   payload: articles
 }) 
 
-export const getArticlesByCategory = (articles) => ({
-  type: GET_ARTICLES_BY_CATEGORY,
-  payload: articles
+const loadArticlesLoading = () => ({
+  type: LOAD_ARTICLES_LOADING,
 })
+
+const loadArticlesError = () => ({
+  type: LOAD_ARTICLES_ERROR,
+})
+
+

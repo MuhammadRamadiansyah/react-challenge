@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios'
 import { Grid, Row, Col, Pager } from 'react-bootstrap';
 import ListArticle from './home/ListArticles'
 import ArticleColumn from "./home/ArticleColumn";
@@ -27,14 +26,14 @@ class Home extends Component {
     }
     this.props.prevArticles(this.props.articles.slice(index, index + 5))
   }
-
+  
+  UNSAFE_componentWillMount () {
+    this.props.getAllArticles()
+    this.interval = setInterval(() => this.props.getAllArticles(), 60 * 1000)
+  }
+  
   componentDidMount () {
-    axios.get('https://newsapi.org/v2/top-headlines?country=id&category=business&apiKey=be71eb3a224f436bad9338489412fedb')
-         .then((response) => {  
-            this.props.getAllArticles(response.data.articles)
-            this.props.getTopArticles(response.data.articles.slice(0,5))
-         })
-         .catch((err) => console.log(err))
+    this.props.getTopArticles(this.props.articles.slice(0,5))
   }
 
   render () {
@@ -63,7 +62,7 @@ class Home extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  articles: state.article,
+  articles: state.article.data,
   topArticles: state.topArticle
 })
 

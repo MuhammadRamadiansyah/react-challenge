@@ -1,13 +1,32 @@
-const reducers = (state=[], action) => {
+const initialState = {
+  error: false,
+  loading: false,
+  data: []
+}
+
+const reducers = (state= {...initialState }, action) => {
   switch (action.type) {
-    case 'GET_ALL_ARTICLES':
-      return action.payload
-    case 'GET_DETAIL_ARTICLE':
-      return [action.payload]
-    case 'GET_ARTICLES_BY_CATEGORY':
-      return action.payload
+    case 'LOAD_ALL_ARTICLES_SUCCESS':
+      return {
+        ...state,
+        data: action.payload,
+        loading: false
+      }
+    case 'LOAD_ARTICLES_LOADING':
+      return {
+        ...state,
+        loading: true
+      }
+    case 'LOAD_ARTICLES_ERROR':
+      return {
+        ...state,
+        loading: false,
+        error: true
+      }
     default:
-      return state
+      return {
+        ...state
+      }
   }
 }
 
