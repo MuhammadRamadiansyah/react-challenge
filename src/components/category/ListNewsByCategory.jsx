@@ -9,7 +9,7 @@ import { getDetailArticle } from '../../stores/detail-article/actions'
 class ListNewsByCategory extends Component {
 
   componentWillReceiveProps (nextProps, prevState) {
-    axios.get(`https://newsapi.org/v2/top-headlines?country=id&category=${nextProps.match.params.category}&apiKey=be71eb3a224f436bad9338489412fedb`)
+    axios.get(`https://newsapi.org/v2/top-headlines?country=id&category=${nextProps.props.match.params.category}&apiKey=be71eb3a224f436bad9338489412fedb`)
     .then((response) => {
       this.props.getArticlesByCategory(response.data.articles)
     })
@@ -17,7 +17,7 @@ class ListNewsByCategory extends Component {
   }
 
   componentDidMount () {
-    axios.get(`https://newsapi.org/v2/top-headlines?country=id&category=${this.props.match.params.category}&apiKey=be71eb3a224f436bad9338489412fedb`)
+    axios.get(`https://newsapi.org/v2/top-headlines?country=id&category=${this.props.props.match.params.category}&apiKey=be71eb3a224f436bad9338489412fedb`)
     .then((response) => {
       this.props.getArticlesByCategory(response.data.articles)      
     })
@@ -25,9 +25,9 @@ class ListNewsByCategory extends Component {
   }
 
   getDetail (article) {
-    let getUrl = this.props.match.url
+    let getUrl = this.props.props.match.url
     this.props.getDetailArticle(article)
-    this.props.history.push(`${getUrl}/${article.title}`)
+    this.props.props.history.push(`${getUrl}/${article.title}`)
   }
 
   render () {
@@ -48,7 +48,7 @@ class ListNewsByCategory extends Component {
     )
     return (
       <div>
-        <h3> List Articles of { this.props.match.params.category} </h3>
+        <h3> List Articles of { this.props.props.match.params.category} </h3>
         { articles }
       </div>
     )
