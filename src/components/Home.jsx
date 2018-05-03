@@ -12,6 +12,12 @@ export default class Home extends Component {
       news: store.getState().article,
       fiveTopArticles: store.getState().topArticle
     }
+    store.subscribe ( () => {
+      this.setState({
+        fiveTopArticles: store.getState().topArticle,
+        news: store.getState().article
+      })
+    })
   }
 
   nextPage () {
@@ -23,13 +29,7 @@ export default class Home extends Component {
     store.dispatch({
       type: 'NEXT_ARTICLES',
       payload: store.getState().article.slice(index, index + 5)
-    })
-
-    store.subscribe ( () => {
-      this.setState({
-        fiveTopArticles: store.getState().topArticle
-      })
-    })
+    }) 
   }
 
   prevPage () {
@@ -43,29 +43,19 @@ export default class Home extends Component {
       type: 'PREV_ARTICLES',
       payload: store.getState().article.slice(index, index + 5)
     })
-
-    store.subscribe ( () => {
-      this.setState({
-        fiveTopArticles: store.getState().topArticle
-      })
-    })
   }
 
   componentDidMount () {
     axios.get('https://newsapi.org/v2/top-headlines?country=id&category=business&apiKey=be71eb3a224f436bad9338489412fedb')
          .then((response) => {  
-          store.dispatch({
-            type: 'GET_ALL_ARTICLES',
-            payload: response.data.articles
-          })
-          store.dispatch({
-            type: 'GET_TOP_ARTICLES',
-            payload: response.data.articles.slice(0,5)
-          })
-          this.setState({
-            fiveTopArticles: response.data.articles.slice(0,5),
-            news: store.getState().article
-          })
+            store.dispatch({
+              type: 'GET_ALL_ARTICLES',
+              payload: response.data.articles
+            })
+            store.dispatch({
+              type: 'GET_TOP_ARTICLES',
+              payload: response.data.articles.slice(0,5)
+            })
          })
          .catch((err) => console.log(err))
   }

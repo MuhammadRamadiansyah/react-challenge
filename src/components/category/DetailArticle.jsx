@@ -9,16 +9,19 @@ export default class DetailArticle extends Component {
     this.state = {
       detailArticle: store.getState().article[0]
     }
-  }
 
-  componentDidMount () {
     store.subscribe( () => {
       this.setState({
         detailArticle: store.getState().article[0] 
       })
     })
-    if (!this.state.detailArticle) {
+  }
+
+  componentDidMount () {
+    
+    if (!store.getState().article) {
       console.log(this.props.history.push('/'))
+      this.props.history.push('/')
     }
   }
   render () {

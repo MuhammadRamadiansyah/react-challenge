@@ -5,7 +5,7 @@ export default class ArticleBox extends Component {
 
 	render () {
 		return (
-		<Thumbnail src={ this.props.image || 'http://www.tradefireworks.net/product_images/fan-slices_242_200_no-image.gif&zc=1'}  alt="242x200">
+		<Thumbnail src={ this.props.image || 'http://www.tradefireworks.net/product_images/fan-slices_242_200_no-image.gif&zc=1'}  alt="242x200/png/jpeg">
 			<h3>{ this.props.title }</h3>
 			<small>Author : { this.props.author }</small>
 			<br />
