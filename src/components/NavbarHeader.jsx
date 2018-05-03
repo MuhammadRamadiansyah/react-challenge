@@ -1,5 +1,6 @@
 import React from 'react'
 import { Nav, NavItem, Navbar } from 'react-bootstrap'
+// import LoginButton from './LoginButton'
 // import { Link } from 'react-router-dom'
 
 const NavbarHeader = () => (

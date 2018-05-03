@@ -3,45 +3,68 @@ import axios from 'axios'
 import { Grid, Row, Col, Pager } from 'react-bootstrap';
 import ListArticle from './home/ListArticles'
 import ArticleColumn from "./home/ArticleColumn";
+import store from '../stores'
 
 export default class Home extends Component {
   constructor () {
     super()
     this.state = {
-      news: [],
-      fiveTopArticles: []
+      news: store.getState().article,
+      fiveTopArticles: store.getState().topArticle
     }
   }
 
   nextPage () {
-    let prevPage = this.state.fiveTopArticles[0]
-    let index = this.state.news.findIndex( article => article.url === prevPage.url) + 5
-    if(index > this.state.news.length - 1) {
+    let prevPage = store.getState().topArticle[0]
+    let index = store.getState().article.findIndex( article => article.url === prevPage.url) + 5
+    if(index > store.getState().article.length - 1) {
       index = 0
     }
-    this.setState({
-      fiveTopArticles: this.state.news.slice(index, index + 5)
+    store.dispatch({
+      type: 'NEXT_ARTICLES',
+      payload: store.getState().article.slice(index, index + 5)
     })
 
+    store.subscribe ( () => {
+      this.setState({
+        fiveTopArticles: store.getState().topArticle
+      })
+    })
   }
 
   prevPage () {
-    let prevPage = this.state.fiveTopArticles[0]
-    let index = this.state.news.findIndex( article => article.url === prevPage.url) - 5
+    let prevPage = store.getState().topArticle[0]
+    let index = store.getState().article.findIndex( article => article.url === prevPage.url) - 5
     if(index < 0) {
-      index = this.state.news.length - 5
+      index = store.getState().article.length - 5
     }
-    this.setState({
-      fiveTopArticles: this.state.news.slice(index, index + 5)
+
+    store.dispatch({
+      type: 'PREV_ARTICLES',
+      payload: store.getState().article.slice(index, index + 5)
+    })
+
+    store.subscribe ( () => {
+      this.setState({
+        fiveTopArticles: store.getState().topArticle
+      })
     })
   }
 
   componentDidMount () {
     axios.get('https://newsapi.org/v2/top-headlines?country=id&category=business&apiKey=be71eb3a224f436bad9338489412fedb')
-         .then((response) => {
+         .then((response) => {  
+          store.dispatch({
+            type: 'GET_ALL_ARTICLES',
+            payload: response.data.articles
+          })
+          store.dispatch({
+            type: 'GET_TOP_ARTICLES',
+            payload: response.data.articles.slice(0,5)
+          })
           this.setState({
-            news: response.data.articles,
-            fiveTopArticles: response.data.articles.slice(0,5)
+            fiveTopArticles: response.data.articles.slice(0,5),
+            news: store.getState().article
           })
          })
          .catch((err) => console.log(err))

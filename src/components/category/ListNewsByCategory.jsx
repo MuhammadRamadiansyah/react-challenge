@@ -36,7 +36,6 @@ export default class ListNewsByCategory extends Component {
 
   getDetail (article) {
     let getUrl = this.props.match.url
-    console.log(getUrl, article)
     this.props.history.push(`${getUrl}/${article.title}/${article.description}/${article.publishedAt}/${article.author}/${article.source.name}`)
   }
 
