@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { ListGroup, ListGroupItem, Button } from 'react-bootstrap';
-import store from '../../stores/index.js'
+import { getDetailArticle } from '../../stores/detail-article/actions'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 
-export default class ListArticle extends Component {
+class ListArticle extends Component {
 
   getDetail = () => {
-    store.dispatch({
-      type: 'GET_DETAIL_ARTICLE',
-      payload: [ this.props.article ]
-    })
+    this.props.getDetailArticle(this.props.article)
     this.props.history.push(`detail/${this.props.article.title}`)
   }
 
@@ -27,3 +26,13 @@ export default class ListArticle extends Component {
     )
   }
 }
+
+
+
+const mapStateToDispatch = (dispatch) => bindActionCreators({
+  getDetailArticle
+}, dispatch)
+export default connect(
+  null,
+  mapStateToDispatch
+)(ListArticle)

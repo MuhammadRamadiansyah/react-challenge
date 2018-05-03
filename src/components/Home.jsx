@@ -5,7 +5,7 @@ import ListArticle from './home/ListArticles'
 import ArticleColumn from "./home/ArticleColumn";
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { getAllArticles, getDetailArticle, getArticlesByCategory } from '../stores/articles/actions'
+import { getAllArticles, getArticlesByCategory } from '../stores/articles/actions'
 import { getTopArticles, nextArticles, prevArticles } from '../stores/top-articles/actions'
 
 class Home extends Component {
@@ -70,7 +70,6 @@ const mapStateToProps = (state) => ({
 const mapStateToDispatch = (dispatch) => bindActionCreators({
   getAllArticles,
   getArticlesByCategory,
-  getDetailArticle,
   getTopArticles,
   nextArticles,
   prevArticles

@@ -3,7 +3,8 @@ import { Panel, Button } from 'react-bootstrap'
 import axios from 'axios'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { getDetailArticle, getArticlesByCategory } from '../../stores/articles/actions'
+import { getArticlesByCategory } from '../../stores/articles/actions'
+import { getDetailArticle } from '../../stores/detail-article/actions'
 
 class ListNewsByCategory extends Component {
 

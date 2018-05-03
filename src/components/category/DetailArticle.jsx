@@ -1,29 +1,9 @@
 import React, { Component } from 'react'
-import store from '../../stores/index.js'
 import ArticleBox from '../general/ArticleBox'
+import { connect } from 'react-redux'
 
-export default class DetailArticle extends Component {
+class DetailArticle extends Component {
 
-  constructor () {
-    super()
-    this.state = {
-      detailArticle: store.getState().article[0]
-    }
-
-    store.subscribe( () => {
-      this.setState({
-        detailArticle: store.getState().article[0] 
-      })
-    })
-  }
-
-  componentDidMount () {
-    
-    if (!store.getState().article) {
-      console.log(this.props.history.push('/'))
-      this.props.history.push('/')
-    }
-  }
   render () {
     var {
       author,
@@ -31,7 +11,7 @@ export default class DetailArticle extends Component {
       publishedAt,
       description,
       urlToImage
-    } = store.getState().article[0]
+    } = this.props.article
 
     return (
       <div>
@@ -39,9 +19,18 @@ export default class DetailArticle extends Component {
                     title= { title } 
                     description= { description } 
                     publishedAt= { publishedAt } 
-                    source= { this.state.detailArticle.source.name} 
+                    source= { this.props.article.source.name} 
                     author= { author }/>
       </div>
     )
   }
 }
+
+const mapStateToProps = (state) => ({
+  article: state.detailArticle
+})
+
+export default connect(
+  mapStateToProps,
+  null
+)(DetailArticle)
