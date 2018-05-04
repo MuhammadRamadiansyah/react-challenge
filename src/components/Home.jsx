@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Row, Col, Pager } from 'react-bootstrap';
+import { Grid, Row, Col, Pager, Alert } from 'react-bootstrap';
 import ListArticle from './home/ListArticles'
 import ArticleColumn from "./home/ArticleColumn";
 import { connect } from 'react-redux'
@@ -40,11 +40,21 @@ class Home extends Component {
     var {
       articles,
       topArticles,
-      loading
+      loading,
+      message,
+      error
     } = this.props
     let listArticles = articles.map( article => 
       <ListArticle article= { article } history= { this.props.history } key= { 'article-' +article.url} />
     )
+    if (error) { 
+      return (
+        <Alert bsStyle="danger">
+          <strong>Oops!</strong> Something wrong!, { message }
+        </Alert>
+      )
+    }
+
     if (loading) {
       return (
       <div className="container-loading">
@@ -77,7 +87,9 @@ class Home extends Component {
 const mapStateToProps = (state) => ({
   articles: state.article.data,
   topArticles: state.topArticle,
-  loading: state.article.loading
+  loading: state.article.loading,
+  error: state.article.error.status,
+  message: state.article.error.message
 })
 
 const mapStateToDispatch = (dispatch) => bindActionCreators({

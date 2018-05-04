@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Panel, Button } from 'react-bootstrap'
+import { Panel, Button, Alert } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { getArticlesByCategory } from '../../stores/articles/actions'
@@ -20,7 +20,9 @@ class ListNewsByCategory extends Component {
   render () {
     var {
       loading,
-      articles
+      articles,
+      error,
+      message
     } = this.props
     let getArticles = articles.map( article => 
       <Panel bsStyle="primary" key={ 'articleDetailCategory-' +article.url}>
@@ -36,7 +38,11 @@ class ListNewsByCategory extends Component {
         }}>Detail</Button>
       </Panel>  
     )
-    
+  if (error) { getArticles = 
+    <Alert bsStyle="danger">
+      <strong>Oops!</strong> Something wrong with : { message }
+    </Alert>
+  }
     return (
       <div>
         <h3> List Articles of { this.props.props.match.params.category} </h3>
@@ -49,7 +55,9 @@ class ListNewsByCategory extends Component {
 
 const mapStateToProps = (state) => ({
   articles: state.article.data,
-  loading: state.article.loading
+  loading: state.article.loading,
+  error: state.article.error.status,
+  message: state.article.error.message
 })
 
 const mapStateToDispatch = (dispatch) => bindActionCreators({

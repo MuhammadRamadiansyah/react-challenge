@@ -8,7 +8,7 @@ export const getAllArticles = () => {
          .then((response) => {
            dispatch(loadAllArticlesSuccess(response.data.articles))
          })
-         .catch((err) => dispatch(loadArticlesError()))
+         .catch((err) => dispatch(loadArticlesError(err)))
   }
 }
 
@@ -19,7 +19,7 @@ export const getArticlesByCategory = (category) => {
     .then((response) => {
       dispatch(loadAllArticlesSuccess(response.data.articles))    
     })
-    .catch((err) => dispatch(loadArticlesError()))
+    .catch((err) => dispatch(loadArticlesError(err)))
   }
 }
 
@@ -32,8 +32,9 @@ const loadArticlesLoading = () => ({
   type: LOAD_ARTICLES_LOADING,
 })
 
-const loadArticlesError = () => ({
+const loadArticlesError = (err) => ({
   type: LOAD_ARTICLES_ERROR,
+  payload: err
 })
 
 

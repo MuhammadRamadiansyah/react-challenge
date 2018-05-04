@@ -1,5 +1,8 @@
 const initialState = {
-  error: false,
+  error: {
+    status: false,
+    message: ''
+  },
   loading: false,
   data: []
 }
@@ -18,10 +21,14 @@ const reducers = (state= {...initialState }, action) => {
         loading: true
       }
     case 'LOAD_ARTICLES_ERROR':
+      const error = {
+        status: true,
+        message: action.payload.message
+      }
       return {
         ...state,
         loading: false,
-        error: true
+        error: error
       }
     default:
       return {
