@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { getAllArticles, getArticlesByCategory } from '../stores/articles/actions'
 import { getTopArticles, nextArticles, prevArticles } from '../stores/top-articles/actions'
+import './Home.css'
 
 class Home extends Component {
 
@@ -27,43 +28,56 @@ class Home extends Component {
     this.props.prevArticles(this.props.articles.slice(index, index + 5))
   }
   
-  UNSAFE_componentWillMount () {
+  componentDidMount () {
     this.props.getAllArticles()
-    this.interval = setInterval(() => this.props.getAllArticles(), 60 * 1000)
+    window.setTimeout( () => {
+      this.props.getTopArticles(this.props.articles.slice(0,5))
+    }, 1000)
   }
   
-  componentDidMount () {
-    this.props.getTopArticles(this.props.articles.slice(0,5))
-  }
-
   render () {
-    let listArticles = this.props.articles.map( article => 
+
+    var {
+      articles,
+      topArticles,
+      loading
+    } = this.props
+    let listArticles = articles.map( article => 
       <ListArticle article= { article } history= { this.props.history } key= { 'article-' +article.url} />
     )
-    return (
-      <Grid>
-        <Row className="show-grid">
-          <Col xs={12} md={8}>
-            <h3> Top 5 Articles</h3>
-            <ArticleColumn news={ this.props.topArticles } />
-            <Pager>
-              <Pager.Item onClick={this.prevPage.bind(this)}>Previous</Pager.Item>{' '}
-              <Pager.Item onClick={this.nextPage.bind(this)}>Next</Pager.Item>
-            </Pager>
-          </Col>
-          <Col xs={6} md={4}>
-            <h3> List Articles</h3>
-            { listArticles }
-          </Col>
-        </Row>
-      </Grid>
-    )
+    if (loading) {
+      return (
+      <div className="container-loading">
+        <div className="loader center"></div>
+      </div>
+      )
+    } else {
+      return (
+          <Grid>
+            <Row className="show-grid">
+              <Col xs={12} md={8}>
+                <h3> Top 5 Articles</h3>
+                <ArticleColumn news={ topArticles } />
+                <Pager>
+                  <Pager.Item onClick={this.prevPage.bind(this)}>Previous</Pager.Item>{' '}
+                  <Pager.Item onClick={this.nextPage.bind(this)}>Next</Pager.Item>
+                </Pager>
+              </Col>
+              <Col xs={6} md={4}>
+                <h3> List Articles</h3>
+                { listArticles }
+              </Col>
+            </Row>
+          </Grid>
+        )
+    }  
   }
 }
 
 const mapStateToProps = (state) => ({
   articles: state.article.data,
-  topArticles: state.topArticle
+  topArticles: state.topArticle,
+  loading: state.article.loading
 })
 
 const mapStateToDispatch = (dispatch) => bindActionCreators({

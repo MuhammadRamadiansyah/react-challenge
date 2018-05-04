@@ -7,14 +7,10 @@ import { getDetailArticle } from '../../stores/detail-article/actions'
 
 class ListNewsByCategory extends Component {
 
-  componentWillReceiveProps (nextProps, prevState) {
-    this.props.getArticlesByCategory(nextProps.props.match.params.category)
-  }
-
   componentDidMount () {
     this.props.getArticlesByCategory(this.props.props.match.params.category)
   }
-
+  
   getDetail (article) {
     let getUrl = this.props.props.match.url
     this.props.getDetailArticle(article)
@@ -22,8 +18,11 @@ class ListNewsByCategory extends Component {
   }
 
   render () {
-
-    let articles = this.props.articles.map( article => 
+    var {
+      loading,
+      articles
+    } = this.props
+    let getArticles = articles.map( article => 
       <Panel bsStyle="primary" key={ 'articleDetailCategory-' +article.url}>
         <Panel.Heading>
           <Panel.Title componentClass="h3"> {article.title}</Panel.Title>
@@ -37,23 +36,27 @@ class ListNewsByCategory extends Component {
         }}>Detail</Button>
       </Panel>  
     )
+    
     return (
       <div>
         <h3> List Articles of { this.props.props.match.params.category} </h3>
-        { articles }
+        { loading ?
+          <h1>Loading...</h1>: getArticles }
       </div>
     )
   }
 }
 
 const mapStateToProps = (state) => ({
-  articles: state.article.data
+  articles: state.article.data,
+  loading: state.article.loading
 })
 
 const mapStateToDispatch = (dispatch) => bindActionCreators({
   getArticlesByCategory,
   getDetailArticle
 }, dispatch)
+
 export default connect(
   mapStateToProps,
   mapStateToDispatch

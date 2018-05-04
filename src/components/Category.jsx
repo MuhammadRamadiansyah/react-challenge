@@ -21,7 +21,7 @@ export default class Category extends Component {
           <Row className="show-grid">
             <Col xs={6} md={4}>
               <h3> List Categories </h3>
-              <ListCategory getUrl={ getUrl} categories={this.state.categories}/>
+              <ListCategory getUrl={ getUrl} categories={this.state.categories} props={this.props}/>
             </Col>
             <Col xs={12} md={8}>
             <Switch>

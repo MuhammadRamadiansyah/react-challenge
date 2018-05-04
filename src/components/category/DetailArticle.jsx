@@ -14,7 +14,6 @@ class DetailArticle extends Component {
         description,
         urlToImage
       } = this.props.article
-  
       return (
         <div>
           <h1> Article </h1>

@@ -1,4 +1,6 @@
-const reducers = (state=[], action) => {
+const initialState = []
+
+const reducers = (state=[...initialState], action) => {
   switch (action.type) {
     case 'GET_TOP_ARTICLES':
       return action.payload  
